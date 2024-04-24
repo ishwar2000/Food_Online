@@ -79,8 +79,8 @@ class user(AbstractBaseUser):
 
 class userProfile(models.Model):
     user = models.OneToOneField(user, on_delete=models.CASCADE, blank=True, null=True)
-    profile_picture = models.ImageField(upload_to="user/profile_picture/", blank=True, null=True)
-    cover_profile = models.ImageField(upload_to="user/profile_picture/", blank=True, null=True)
+    profile_picture = models.ImageField(upload_to="static/user/profile_picture/", blank=True, null=True)
+    cover_profile = models.ImageField(upload_to="static/user/cover_profile_picture/", blank=True, null=True)
     address_line_1 = models.CharField(max_length=50, blank=True, null=True)
     address_line_2 = models.CharField(max_length=50, blank=True, null=True)
     country = models.CharField(max_length=15, blank=True, null=True)

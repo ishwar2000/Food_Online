@@ -26,8 +26,7 @@ def registerUser(request):
         form = registerUserForm()
     return render(request, "accounts/registerUser.html", {'form' : form})
 
-def resetPassword(request):
-    pass
+
 
 def activate(request, uid, token):
     try:

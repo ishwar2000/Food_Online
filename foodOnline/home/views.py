@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages, auth
 from accounts.models import user
+from vendor.models import vendor
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.http import HttpResponse
@@ -17,7 +18,11 @@ def customerDashboard(request):
 
 @login_required(login_url='login')
 def vendorDashboard(request):
-    return HttpResponse("<h1>this is vendorDashboard {{ request.user }}<h1>")
+    Vendor = vendor.objects.get(user=request.user)
+    print(vendor.vendor_name)
+    context = {"user":request.user
+               }
+    return render(request, "vendor/vendorProfile.html", context)
 
 @login_required(login_url='login')
 def checkAndRedirect(request):
@@ -51,6 +56,11 @@ def loginUser(request):
 @login_required(login_url='login')
 def logoutUser(request):
     if request.user.is_authenticated:
-        print(request.user)
+        messages.info(request, "Logged out succesfully !!")
         logout(request)
     return render(request, "accounts/login.html")
+
+@login_required(login_url='login')
+def changePassword(request):
+    request.session['uid'] = request.user.pk
+    return render(request, "accounts/resetPassword.html",{"update":1})
