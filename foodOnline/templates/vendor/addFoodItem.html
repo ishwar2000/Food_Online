@@ -22,15 +22,21 @@
 							<hr>
                             <button class="btn btn-secondary" onclick="history.back()"><i class="fa fa-angle-left" aria-hidden="true"></i> Back</button>
                             <br><br>
-                            <h6>Modify Category</h6>
-                            <form action="{% url 'editCategory' category.id %}" method="POST">
+                            <h6>Add New Food Item</h6>
+                            <form action="{% url 'addFoodItem' %}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="form-fields-set">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12 col-sm-12">
                                             <div class="field-holder">
-                                                <label >Category Name *</label>
-                                                {{form.categoryName}}
+                                                <label >Food Title *</label>
+                                                {{form.foodTitle}}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                            <div class="field-holder">
+                                                <label >Category *</label>
+                                                {{form.category}}
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-sm-12">
@@ -39,19 +45,37 @@
                                                 {{form.description}}
                                             </div>
                                         </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="field-holder">
+                                                <label >Price *</label>
+                                                {{form.price}}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="field-holder">
+                                                <label >Image</label>
+                                                {{form.image}}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="field-holder">
+                                                <label >Is Available?</label>
+                                                {{form.isAvailable}}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                
 
                                 {% for field in form %}
                                     {% if field.errors %}
                                         {% for error in field.errors %}
-                                            <li style="color: red;">{{ error }}</li>
+                                            <li style="color: red;">{{field.name}} {{ error }}</li>
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}
 
-                                <button type="submit" class="btn btn-info"><i class="fa fa-check" aria-hidden="true"></i> Update</button>
-                                <a href="{% url 'deleteCategory' id=category.id%}" onclick="return confirm('Are you sure you want to delete this category?')" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                                <button type="submit" class="btn btn-info"><i class="fa fa-check" aria-hidden="true"></i> Create</button>
                             </form>
 
                             <!-- render form -->

@@ -10,7 +10,7 @@ class registerUserForm(forms.ModelForm):
         fields = ["first_name","last_name","username","email","phone_number"]
     
     def clean(self, *args, **kwargs):
-        cleaned_data = super(registerUserForm, self).clean()
+        cleaned_data = super(registerUserForm, self).clean(*args, **kwargs)
 
         password = cleaned_data.get("password")
         confPassword = cleaned_data.get("confirmPassword")

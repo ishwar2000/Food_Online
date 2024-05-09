@@ -6,3 +6,8 @@ class CategoryForm(forms.ModelForm):
         model = category
         fields = ["categoryName","description"]
 
+class foodItemForm(forms.ModelForm):
+    class Meta:
+        model = foodItem
+        fields = ["foodTitle", "price","category", "description", "image","isAvailable"]
+
