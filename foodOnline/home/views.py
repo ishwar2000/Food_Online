@@ -3,11 +3,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages, auth
 from accounts.models import user, userProfile
 from vendor.models import vendor
+from menuBuilder.models import category, foodItem
 from django.contrib.auth.decorators import login_required, user_passes_test
 from vendor.forms import registerVendorForm
 from accounts.forms import userProfileForm
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
+from django.db.models import Prefetch
 # Create your views here.
 def check_role_vendor(user):
     if user.role == 1:
@@ -23,6 +25,28 @@ def check_role_customer(user):
     else:
         raise PermissionDenied
     
+def marketPlace(request):
+    vendors = vendor.objects.filter(is_approved = True, user__is_active = True)
+    vendor_count = vendors.count()
+    context = {
+        "vendors":vendors,
+        "vendor_count":vendor_count
+    }
+    return render(request, "user/marketPlace.html", context)
+def restaurant(request, id):
+    selectedVendor = vendor.objects.get(id = id)
+    categories = category.objects.filter(vendor = selectedVendor).prefetch_related(
+        Prefetch(
+            'fooditems',
+            queryset=foodItem.objects.filter(isAvailable=True)
+        )
+    )
+
+    context = {
+        "categories":categories
+    }
+    return render(request, "user/restaurantDetails.html", context)
+
 
 
 def homePage(request):
