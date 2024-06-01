@@ -9,5 +9,6 @@
             "src": "/(.*)",
             "dest": "foodOnline/wsgi.py"
         }
-    ]
+    ],
+    "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
