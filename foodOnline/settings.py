@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'foodOnline.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER':'postgres',
-        'PASSWORD':'VIQcQxVPIFjhBGGOixvOFWjCLOFuGgvZ',
-        'HOST' : 'viaduct.proxy.rlwy.net',
-        'PORT' : '19686'
+        'NAME': 'postgres',
+        'USER':'postgres.izzphofsgctlbgcjmfhn',
+        'PASSWORD':'y240Nq2QrPZV6pxg',
+        'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
+        'PORT' : '6543'
     }
 }
 

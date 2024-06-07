@@ -56,7 +56,7 @@ def homePage(request):
 def customerDashboard(request):
     user = request.user
     print(user)
-    return HttpResponse("<h1>this is customerdashboard {{ user }}<h1>")
+    return redirect("homePage")
 
 @login_required(login_url='login')
 def vendorDashboard(request):
