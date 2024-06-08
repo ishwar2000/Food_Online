@@ -66,7 +66,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'accounts.context_processor.get_vendor'
+                'accounts.context_processor.get_vendor',
+                'accounts.context_processor.getCartItems',
+                'accounts.context_processor.getTotal'
             ],
         },
     },
@@ -82,7 +84,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
-        'USER':'postgres.izzphofsgctlbgcjmfhn',
+        'USER':'postgres.uruhugkfwgdofgmiguum',
         'PASSWORD':'y240Nq2QrPZV6pxg',
         'HOST' : 'aws-0-ap-southeast-1.pooler.supabase.com',
         'PORT' : '6543'
@@ -131,8 +133,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'foodOnline','static'),
+                    os.path.join(BASE_DIR,'static')
+                    
+                    ]
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR /'media'

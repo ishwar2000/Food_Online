@@ -7,9 +7,12 @@ from menuBuilder.models import category, foodItem
 from django.contrib.auth.decorators import login_required, user_passes_test
 from vendor.forms import registerVendorForm
 from accounts.forms import userProfileForm
-from django.http import HttpResponse
+from accounts.context_processor import getCartItems, getTotal
+from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch
+from .models import userCart
+from menuBuilder.models import foodItem
 # Create your views here.
 def check_role_vendor(user):
     if user.role == 1:
@@ -42,8 +45,13 @@ def restaurant(request, id):
         )
     )
 
+    cart_items = None 
+
+    if request.user.is_authenticated:
+        cart_items = userCart.objects.filter(user=request.user)
     context = {
-        "categories":categories
+        "categories":categories,
+        "cart_items":cart_items
     }
     return render(request, "user/restaurantDetails.html", context)
 
@@ -132,3 +140,79 @@ def restaurantProfile(request):
                "profile_form":profile_form,
                "profile":UserProfile}
     return render(request, "vendor/restaurant-restaurant.html", context)
+
+
+def addToCart(request, id):
+    if request.user.is_authenticated:
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            try:
+                
+                currentFoodItem = foodItem.objects.get(id=id)
+                
+                try:
+                    chkCart = userCart.objects.get(user=request.user, foodItem=currentFoodItem)
+                    chkCart.quantity += 1
+                    chkCart.save()
+                    
+                    return JsonResponse({"status":"success","message":"incremented","cartItem":getCartItems(request),'qty':chkCart.quantity,"totals":getTotal(request)})
+                except:
+                    
+                    chkCart = userCart.objects.create(user=request.user, foodItem=currentFoodItem, quantity=1)
+                    print(id)
+                    return JsonResponse({"status":"success","message":"newly added","cartItem":getCartItems(request),'qty':chkCart.quantity,"totals":getTotal(request)})
+
+            except:
+                return JsonResponse({"status":"failed","message":"id doesnt exist"})
+        else:
+            return JsonResponse({"status":"failed","message":"Only ajax req"})
+
+    return JsonResponse({"status":"failed","message":"please log in"})
+    # return HttpResponse("added to cart" + str(id))
+
+
+def decreaseCart(request, id):
+    if request.user.is_authenticated:
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            try:
+                currentFoodItem = foodItem.objects.get(id=id)
+
+                try:
+                    chkCart = userCart.objects.get(user=request.user, foodItem=currentFoodItem)
+                    chkCart.quantity -= 1
+                    chkCart.save()
+
+                    if chkCart.quantity == 0:
+                        chkCart.delete()
+
+                    return JsonResponse({"status":"success","message":"decremented","cartItem":getCartItems(request),'qty':chkCart.quantity,"totals":getTotal(request)})
+                except:
+                    # chkCart = userCart.objects.create(user=request.user, foodItem=currentFoodItem, quantity=1)
+                    return JsonResponse({"status":"failed","message":"No food item"})
+
+            except:
+                return JsonResponse({"status":"failed","message":"id doesnt exist"})
+        else:
+            return JsonResponse({"status":"failed","message":"Only ajax req"})
+
+    return JsonResponse({"status":"failed","message":"please log in"})
+
+
+@login_required(login_url='login')
+def viewCart(request):
+    cart_items = userCart.objects.filter(user=request.user)
+    context = {
+        "cart_items":cart_items
+    }
+    return render(request, "user/cart.html",context)
+
+@login_required(login_url='login')
+def deleteCart(request,id):
+    try:
+        chckCart = userCart.objects.filter(user=request.user, id=id)
+        
+        chckCart.delete()
+        messages.info(request, "item Delete")
+        return JsonResponse({"status":"success","message":"item deleted","cartItem":getCartItems(request),"totals":getTotal(request)})
+
+    except:
+        return JsonResponse({"status":"failed","message":"No item found"})

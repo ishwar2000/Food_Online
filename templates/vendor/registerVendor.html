@@ -14,7 +14,7 @@
                     <p class="text-center">Please fill this form to get yourself onboarded in the foodOnline marketplace.</p>
                     <hr>
                     <div id="restaurant-sets-holder">
-                        <form action="{% url 'registerVendor' %}" class="form-fields-set foodbakery-dev-restaurant-form" method="post">
+                        <form action="{% url 'registerVendor' %}" class="form-fields-set foodbakery-dev-restaurant-form" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <ul class="register-add-restaurant-tab-container restaurant-information-tab-container">
                                 <li>
@@ -88,7 +88,7 @@
                                 </li>
                                 <li>
                                     <ul class="errorlist">
-                                        {% for field in form %}
+                                        {% for field in vendorForm %}
                                             {% if field.errors %}
                                                 {% for error in field.errors %}
                                                     <li style="color: red;">{{error}}</li>

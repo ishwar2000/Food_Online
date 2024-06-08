@@ -1,6 +1,6 @@
 
 from django.urls import path, include
-from .views import homePage, loginUser, logoutUser, customerDashboard, vendorDashboard, changePassword, restaurantProfile, marketPlace, restaurant
+from .views import homePage, loginUser, logoutUser, customerDashboard, vendorDashboard, changePassword, restaurantProfile, marketPlace, restaurant,addToCart, decreaseCart,viewCart,deleteCart
 
 urlpatterns = [
     path('', homePage, name="homePage"),
@@ -11,6 +11,9 @@ urlpatterns = [
     path('changePassword/', changePassword, name="changePassword"),
     path('restaurantProfile/', restaurantProfile, name="restaurantProfile"),
     path('marketPlace/', marketPlace, name="marketPlace"),
-    path('restaurant/<id>', restaurant, name="restaurant")
-
+    path('restaurant/<id>', restaurant, name="restaurant"),
+    path('addToCart/<id>', addToCart, name="addToCart"),
+    path('decreaseCart/<id>', decreaseCart, name="decreaseCart"),
+    path('viewCart', viewCart, name="viewCart"),
+    path('deleteCart/<id>', deleteCart, name="deleteCart"),
 ]

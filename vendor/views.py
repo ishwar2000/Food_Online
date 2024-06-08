@@ -15,8 +15,9 @@ from django.contrib import messages
 
 def registerVendor(request):
     if request.method == "POST":
+        print(request.FILES)
         userForm = registerUserForm(request.POST)
-        vendorForm = registerVendorForm(request.POST)
+        vendorForm = registerVendorForm(request.POST, request.FILES)
 
         if userForm.is_valid() and vendorForm.is_valid():
             User = userForm.save(commit=False)
@@ -33,6 +34,9 @@ def registerVendor(request):
             # send_verification
             send_verification_link(request, User)
             return redirect("login")
+        else:
+
+            print(vendorForm.errors)
     else:
         userForm = registerUserForm()
         vendorForm = registerVendorForm()

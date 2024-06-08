@@ -7,14 +7,14 @@ class vendor(models.Model):
     user = models.OneToOneField(user, on_delete=models.CASCADE)
     userProfile = models.OneToOneField(userProfile, on_delete=models.CASCADE, blank=True, null=True)
     vendor_name = models.CharField(max_length=50, unique=True)
-    vendor_licence = models.ImageField(upload_to="media/vendor/license/", blank=True, null=True)
+    vendor_licence = models.ImageField(upload_to="media/vendor/license/", blank=False, null=False)
     is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
 
     def __str__(self):
-        return self.user.email
+        return self.vendor_name
     
     def save(self, *args, **kwargs):
         if self.pk is not None:
