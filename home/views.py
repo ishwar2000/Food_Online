@@ -13,6 +13,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch
 from .models import userCart
 from menuBuilder.models import foodItem
+from orders.forms import orderForm
 # Create your views here.
 def check_role_vendor(user):
     if user.role == 1:
@@ -216,3 +217,28 @@ def deleteCart(request,id):
 
     except:
         return JsonResponse({"status":"failed","message":"No item found"})
+
+@login_required(login_url='login')
+def checkout(request):
+    cart_items = userCart.objects.filter(user=request.user)
+    form = orderForm()
+
+    user_profile = userProfile.objects.get(user=request.user)
+    default_values = {
+        'first_name': request.user.first_name,
+        'last_name': request.user.last_name,
+        'phone': request.user.phone_number,
+        'email': request.user.email,
+        'address': user_profile.address_line,
+        'country': user_profile.country,
+        'state': user_profile.state,
+        'city': user_profile.city,
+        'pin_code': user_profile.pin_code,
+    }
+    form = orderForm(initial=default_values)
+    
+    context = {
+        "cart_items":cart_items,
+        "form":form
+    }
+    return render(request, "user/checkout.html",context)
